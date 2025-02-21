@@ -1,7 +1,7 @@
 import { Rocket, FileText, Archive } from "lucide-react"
 import { Link } from "react-router-dom"
 
-const SecondarySidebar = ({ activeSection, setIsNewProjectModalOpen, setIsNewProjectLibraryModalOpen, }) => {
+const SecondarySidebar = ({ activeSection, setIsNewProjectModalOpen, setIsNewProjectLibraryModalOpen, setIsClipboardTemplateOpen }) => {
     const renderContent = () => {
         switch (activeSection) {
             // case "clipboard":

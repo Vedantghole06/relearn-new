@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Search, X, Pencil, Upload, Link, LogOut, Settings, } from "lucide-react"
+import { Search, X, Pencil, Upload, Link, LogOut, Settings, Paperclip, } from "lucide-react"
 import ClipboardContent from "../components/ClipboardContent"
 import BookContent from "../components/BookContent"
 import LeftSidebar from "../components/LeftSidebar"
@@ -13,7 +13,8 @@ export default function Home() {
     const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState(false)
     const [isNewProjectLibraryModalOpen, setIsNewProjectLibraryModalOpen] = useState(false)
     const [isProfileOpen, setIsProfileOpen] = useState(false)
-    const [activeSection, setActiveSection] = useState("projects")
+    const [activeSection, setActiveSection] = useState("clipboard")
+    // const [isClipboardTemplateOpen, setIsClipboardTemplateOpen] = useState(false)
 
     const toggleProfile = () => {
         setIsProfileOpen(!isProfileOpen)
@@ -102,7 +103,8 @@ export default function Home() {
                 <LeftSidebar activeSection={activeSection} setActiveSection={setActiveSection} />
 
                 {/* Secondary Sidebar */}
-                <SecondarySidebar activeSection={activeSection} setIsNewProjectModalOpen={setIsNewProjectModalOpen} setIsNewProjectLibraryModalOpen={setIsNewProjectLibraryModalOpen} />
+                <SecondarySidebar activeSection={activeSection} setIsNewProjectModalOpen={setIsNewProjectModalOpen} setIsNewProjectLibraryModalOpen={setIsNewProjectLibraryModalOpen}
+                />
 
                 {/* Main Content */}
                 <main className="flex-1 overflow-x-hidden">{renderContent()}</main>
@@ -132,9 +134,9 @@ export default function Home() {
                                 </button>
 
                                 <button className="p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors text-left flex flex-col items-center">
-                                    <div className="w-8 h-8 bg-gray-600 text-white flex items-center justify-center font-bold rounded mb-4">
+                                    <span className="w-8 h-8 bg-gray-600 text-white flex items-center justify-center font-bold rounded mb-4">
                                         T
-                                    </div>
+                                    </span>
                                     <h3 className="text-lg font-medium text-gray-700">Use a template</h3>
                                 </button>
 
@@ -172,14 +174,14 @@ export default function Home() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <button className="p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors text-left flex flex-col items-center">
-                                    <Pencil className="w-8 h-8 text-gray-600 mb-4" />
+                                    <Paperclip className="w-8 h-8 text-gray-600 mb-4" />
                                     <h3 className="text-lg font-medium text-gray-700">Question Block</h3>
                                 </button>
 
                                 <button className="p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors text-left flex flex-col items-center">
-                                    <div className="w-8 h-8 bg-gray-600 text-white flex items-center justify-center font-bold rounded mb-4">
+                                    <button className="w-8 h-8 bg-gray-600 text-white flex items-center justify-center font-bold rounded mb-4">
                                         T
-                                    </div>
+                                    </button>
                                     <h3 className="text-lg font-medium text-gray-700">Template</h3>
                                 </button>
 
