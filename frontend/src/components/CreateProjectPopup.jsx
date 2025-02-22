@@ -5,7 +5,7 @@ const CreateProjectPopup = ({ onClose }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-gray-100 bg-opacity-10">
       <div className="bg-white  shadow-lg w-[600px]">
         {/* Header */}
-        <div className="bg-blue-500 text-white px-4 py-3 flex justify-between items-center ">
+        <div className=" bg-blue-400 text-white px-4 py-3 flex justify-between items-center ">
           <h2 className="text-lg font-semibold">
             Create project: Choose template
           </h2>
@@ -22,7 +22,7 @@ const CreateProjectPopup = ({ onClose }) => {
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end bg-gray-100 px-4 py-3 rounded-b-lg">
+        <div className="flex justify-end px-4 py-3 rounded-b-lg">
           <button
             className="px-4 py-2 text-blue-500    rounded-md mr-2 hover:bg-gray-300"
             onClick={onClose}

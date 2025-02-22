@@ -7,7 +7,7 @@ const ImportXLSFormPopup = ({ onClose }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-gray-100 bg-opacity-10">
       <div className="bg-white rounded-lg shadow-lg w-[600px]">
         {/* Header */}
-        <div className="bg-blue-500 text-white px-4 py-3 flex justify-between items-center ">
+        <div className=" bg-blue-400 text-white px-4 py-3 flex justify-between items-center ">
           <h2 className="text-lg font-semibold">
             Create project: Import XLSForm
           </h2>
@@ -37,7 +37,7 @@ const ImportXLSFormPopup = ({ onClose }) => {
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end bg-gray-100 px-4 py-3">
+        <div className="flex justify-end  px-4 py-3">
           <button
             onClick={onClose}
             className="px-4 py-2 text-blue-500  rounded-md mr-2"
@@ -47,7 +47,7 @@ const ImportXLSFormPopup = ({ onClose }) => {
           <button
             className={`px-4 py-2 text-white rounded-md ${
               url
-                ? "bg-blue-500 hover:bg-blue-600"
+                ? " bg-blue-400 hover:bg-blue-600"
                 : "bg-blue-300 cursor-not-allowed"
             }`}
             disabled={!url}

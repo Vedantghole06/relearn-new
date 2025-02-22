@@ -17,12 +17,11 @@ import CreateProjectPopup from "../components/CreateProjectPopup";
 import UploadXLSFormPopup from "../components/UploadXLSFormPopup";
 import ImportXLSForm from "../components/ImportXLSForm";
 import ProjectPopup from "../components/ProjectPopup";
+import TemplatePopupLib from "../components/TemplatePopupLib";
+import Collection from "../components/CollectionLib";
+import UploadLib from "../components/UploadLib";
 
 export default function Home() {
-  const [isTemplatePopupOpen, setIsTemplatePopupOpen] = useState(false);
-  const [isUploadPopupOpen, setIsUploadPopupOpen] = useState(false);
-  const [isCreateProjectPopupOpen, setIsCreateProjectPopupOpen] =
-    useState(false);
   const [isBuildFromScratch, setIsBuildFromScratch] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -34,6 +33,14 @@ export default function Home() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("clipboard");
   // const [isClipboardTemplateOpen, setIsClipboardTemplateOpen] = useState(false)
+  const [isTemplatePopupOpen, setIsTemplatePopupOpen] = useState(false);
+  const [isUploadPopupOpen, setIsUploadPopupOpen] = useState(false);
+  const [isCreateProjectPopupOpen, setIsCreateProjectPopupOpen] =
+    useState(false);
+  const [isTemplatePopupLibOpen, setIsTemplatePopupLibOpen] = useState(false);
+  const [isCollectionPopupLibOpen, setIsCollectionPopupLibOpen] =
+    useState(false);
+  const [isUploadPopupLibOpen, setisUploadPopupLibOpen] = useState(false);
 
   const toggleProfile = () => {
     setIsProfileOpen(!isProfileOpen);
@@ -173,7 +180,9 @@ export default function Home() {
                     Build from scratch
                   </h3>
                 </button>
-                {isBuildFromScratch && <ProjectPopup onClose={()=>(setIsBuildFromScratch(false))}/>}
+                {isBuildFromScratch && (
+                  <ProjectPopup onClose={() => setIsBuildFromScratch(false)} />
+                )}
 
                 <button
                   className="p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors text-left flex flex-col items-center"
@@ -258,26 +267,48 @@ export default function Home() {
                   </h3>
                 </button>
 
-                <button className="p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors text-left flex flex-col items-center">
-                  <button className="w-8 h-8 bg-gray-600 text-white flex items-center justify-center font-bold rounded mb-4">
+                <button
+                  className="p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors text-left flex flex-col items-center"
+                  onClick={() => setIsTemplatePopupLibOpen(true)}
+                >
+                  <div className="w-8 h-8 bg-gray-600 text-white flex items-center justify-center font-bold rounded mb-4">
                     T
-                  </button>
+                  </div>
                   <h3 className="text-lg font-medium text-gray-700">
                     Template
                   </h3>
                 </button>
+                {isTemplatePopupLibOpen && (
+                  <TemplatePopupLib
+                    onClose={() => setIsTemplatePopupLibOpen(false)}
+                  />
+                )}
 
-                <button className="p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors text-left flex flex-col items-center">
+                <button
+                  className="p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors text-left flex flex-col items-center"
+                  onClick={() => setisUploadPopupLibOpen(true)}
+                >
                   <Upload className="w-8 h-8 text-gray-600 mb-4" />
                   <h3 className="text-lg font-medium text-gray-700">Upload</h3>
                 </button>
+                {isUploadPopupLibOpen && (
+                  <UploadLib onClose={() => setisUploadPopupLibOpen(false)} />
+                )}
 
-                <button className="p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors text-left flex flex-col items-center">
+                <button
+                  className="p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors text-left flex flex-col items-center"
+                  onClick={() => setIsCollectionPopupLibOpen(true)}
+                >
                   <Link className="w-8 h-8 text-gray-600 mb-4" />
                   <h3 className="text-lg font-medium text-gray-700">
                     Collections
                   </h3>
                 </button>
+                {isCollectionPopupLibOpen && (
+                  <Collection
+                    onClose={() => setIsCollectionPopupLibOpen(false)}
+                  />
+                )}
               </div>
             </div>
           </div>
