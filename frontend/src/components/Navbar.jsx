@@ -9,6 +9,11 @@ export default function Navbar() {
     setIsProfileOpen(!isProfileOpen)
   }
 
+  const handleLogout = () => {
+    localStorage.removeItem("token")
+    window.location.href = "/"
+  }
+
   return (
     <header className="bg-[#2F3542] text-white p-4">
       <div className="container mx-auto flex items-center justify-between">
@@ -42,7 +47,7 @@ export default function Navbar() {
                 <Settings className="h-4 w-4 mr-2" />
                 Account Settings
               </button>
-              <button className="flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100 text-red-600">
+              <button onClick={handleLogout} className="flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100 text-red-600">
                 <LogOut className="h-4 w-4 mr-2" />
                 Logout
               </button>
