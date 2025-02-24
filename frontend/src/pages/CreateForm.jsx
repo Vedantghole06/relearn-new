@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Plus, X, ChevronDown } from 'lucide-react';
 
 const CreateForm = () => {
   const [sections, setSections] = useState([
@@ -9,7 +10,8 @@ const CreateForm = () => {
         {
           id: Date.now(),
           questionText: '',
-          type: 'Short Answer'
+          type: 'Short Answer',
+          options: []
         }
       ]
     }
@@ -25,7 +27,8 @@ const CreateForm = () => {
           {
             id: Date.now(),
             questionText: '',
-            type: 'Short Answer'
+            type: 'Short Answer',
+            options: []
           }
         ]
       }
@@ -46,7 +49,8 @@ const CreateForm = () => {
             {
               id: Date.now(),
               questionText: '',
-              type: 'Short Answer'
+              type: 'Short Answer',
+              options: []
             }
           ]
         };
@@ -67,96 +71,269 @@ const CreateForm = () => {
     }));
   };
 
+  const addOption = (sectionId, questionId) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          questions: section.questions.map(question => {
+            if (question.id === questionId) {
+              return {
+                ...question,
+                options: [
+                  ...question.options,
+                  {
+                    id: Date.now(),
+                    text: ''
+                  }
+                ]
+              };
+            }
+            return question;
+          })
+        };
+      }
+      return section;
+    }));
+  };
+
+  const deleteOption = (sectionId, questionId, optionId) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          questions: section.questions.map(question => {
+            if (question.id === questionId) {
+              return {
+                ...question,
+                options: question.options.filter(option => option.id !== optionId)
+              };
+            }
+            return question;
+          })
+        };
+      }
+      return section;
+    }));
+  };
+
+  const updateOptionText = (sectionId, questionId, optionId, text) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          questions: section.questions.map(question => {
+            if (question.id === questionId) {
+              return {
+                ...question,
+                options: question.options.map(option => {
+                  if (option.id === optionId) {
+                    return { ...option, text };
+                  }
+                  return option;
+                })
+              };
+            }
+            return question;
+          })
+        };
+      }
+      return section;
+    }));
+  };
+
+  const handleQuestionTypeChange = (sectionId, questionId, newType) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          questions: section.questions.map(question => {
+            if (question.id === questionId) {
+              return {
+                ...question,
+                type: newType,
+                options: newType === 'Multiple Choice' || newType === 'Checkbox' ? [
+                  { id: Date.now(), text: '' },
+                  { id: Date.now() + 1, text: '' }
+                ] : []
+              };
+            }
+            return question;
+          })
+        };
+      }
+      return section;
+    }));
+  };
+
+  const updateQuestionText = (sectionId, questionId, text) => {
+    setSections(sections.map(section => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          questions: section.questions.map(question => {
+            if (question.id === questionId) {
+              return { ...question, questionText: text };
+            }
+            return question;
+          })
+        };
+      }
+      return section;
+    }));
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
-      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-sm">
-        <div className="p-6">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">Create Your Form</h1>
-          <p className="text-gray-600 mb-6">Design a personalized form by adding questions, sections, and much more.</p>
-          
-          {/* Form Title */}
-          <input
-            type="text"
-            placeholder="Enter Form Title"
-            className="w-full mb-4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          
-          {/* Form Description */}
-          <textarea
-            placeholder="Enter Form Description"
-            className="w-full mb-6 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            rows="3"
-          />
-          
-          {/* Add Section Button */}
-          <button
-            onClick={addSection}
-            className="mb-6 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center"
-          >
-            <span className="mr-1">+</span> Add Section
-          </button>
-          
-          {/* Sections */}
-          {sections.map((section) => (
-            <div key={section.id} className="mb-6 p-6 border border-gray-200 rounded-lg">
-              <h2 className="text-lg font-semibold mb-4">{section.title}</h2>
-              
-              {/* Questions */}
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-4 md:p-6 lg:p-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-8 transition-all duration-300 hover:shadow-xl">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4 text-center">Create Your Form</h1>
+          <p className="text-gray-600 mb-8 text-center text-lg">Design a professional form with custom sections and questions.</p>
+
+          <div className="space-y-6">
+            <input
+              type="text"
+              placeholder="Enter Form Title"
+              className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+            />
+
+            <textarea
+              placeholder="Enter Form Description"
+              className="w-full px-4 py-3 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              rows="3"
+            />
+          </div>
+        </div>
+
+        <button
+          onClick={addSection}
+          className="mb-8 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 flex items-center justify-center gap-2 font-medium"
+        >
+          <Plus size={20} /> Add New Section
+        </button>
+
+        {sections.map((section) => (
+          <div key={section.id} className="mb-8 bg-white rounded-xl shadow-lg p-6 md:p-8 transition-all duration-300 hover:shadow-xl">
+            <input
+              type="text"
+              placeholder="Section Title"
+              value={section.title}
+              onChange={(e) => {
+                setSections(sections.map(s =>
+                  s.id === section.id ? { ...s, title: e.target.value } : s
+                ));
+              }}
+              className="w-full text-xl md:text-2xl font-semibold mb-6 px-4 py-2 border-b border-gray-200 focus:outline-none focus:border-blue-500 transition-all duration-200 bg-transparent"
+            />
+
+            <div className="space-y-6">
               {section.questions.map((question) => (
-                <div key={question.id} className="mb-4 p-4 bg-gray-50 rounded-md">
-                  <div className="flex gap-4 mb-4">
+                <div key={question.id} className="bg-gray-50 rounded-lg p-6 transition-all duration-200 hover:shadow-md">
+                  <div className="flex flex-col md:flex-row gap-4 mb-4">
                     <input
                       type="text"
                       placeholder="Enter Question"
-                      className="flex-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      value={question.questionText}
+                      onChange={(e) => updateQuestionText(section.id, question.id, e.target.value)}
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
                     />
-                    <select className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                      <option>Short Answer</option>
-                      <option>Long Answer</option>
-                      <option>Multiple Choice</option>
-                    </select>
-                    <button
-                      onClick={() => deleteQuestion(section.id, question.id)}
-                      className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-                      title="Delete Question"
-                    >
-                      ×
-                    </button>
+                    <div className="flex gap-2">
+                      <div className="relative">
+                        <select
+                          className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 appearance-none bg-white pr-10"
+                          onChange={(e) => handleQuestionTypeChange(section.id, question.id, e.target.value)}
+                          value={question.type}
+                        >
+                          <option>Short Answer</option>
+                          <option>Long Answer</option>
+                          <option>Multiple Choice</option>
+                          <option>Checkbox</option>
+                          <option>Decimal</option>
+                          <option>Number</option>
+                          <option>File</option>
+                        </select>
+                        <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                          <ChevronDown size={20} />
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => deleteQuestion(section.id, question.id)}
+                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-all duration-200"
+                        title="Delete Question"
+                      >
+                        <X size={20} />
+                      </button>
+                    </div>
                   </div>
-                  <input
-                    type="text"
-                    placeholder="Your answer"
-                    className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    disabled
-                  />
+
+                  {(question.type === 'Multiple Choice' || question.type === 'Checkbox') && (
+                    <div className="mt-4 space-y-3">
+                      {question.options.map((option) => (
+                        <div key={option.id} className="flex items-center gap-3">
+                          <input
+                            type={question.type === 'Multiple Choice' ? 'radio' : 'checkbox'}
+                            disabled
+                            className="w-4 h-4"
+                          />
+                          <input
+                            type="text"
+                            placeholder="Enter option"
+                            value={option.text}
+                            onChange={(e) => updateOptionText(section.id, question.id, option.id, e.target.value)}
+                            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+                          />
+                          <button
+                            onClick={() => deleteOption(section.id, question.id, option.id)}
+                            className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-all duration-200"
+                            aria-label="Delete option"
+                          >
+                            <X size={16} />
+                          </button>
+                        </div>
+                      ))}
+                      <button
+                        onClick={() => addOption(section.id, question.id)}
+                        className="mt-2 px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 flex items-center gap-2 text-sm font-medium"
+                      >
+                        <Plus size={16} /> Add Option
+                      </button>
+                    </div>
+                  )}
+
+                  {!['Multiple Choice', 'Checkbox'].includes(question.type) && (
+                    <input
+                      type="text"
+                      placeholder="Your answer"
+                      className="w-full mt-4 px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed"
+                      disabled
+                    />
+                  )}
                 </div>
               ))}
-              
-              {/* Add Question Button */}
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 mt-6">
               <button
                 onClick={() => addQuestion(section.id)}
-                className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 flex items-center justify-center gap-2 flex-1 sm:flex-none"
               >
-                <span className="mr-1">+</span> Add Question
+                <Plus size={20} /> Add Question
               </button>
-              
-              {/* Delete Section Button */}
               <button
                 onClick={() => deleteSection(section.id)}
-                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="px-4 py-2 text-red-600 border border-red-200 rounded-lg hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-200 flex items-center justify-center gap-2"
               >
-                Delete Section
+                <X size={20} /> Delete Section
               </button>
             </div>
-          ))}
-          
-          {/* Save Form Button */}
-          <button
-            className="w-full py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            Save Form
-          </button>
-        </div>
+          </div>
+        ))}
+
+        <button
+          className="w-full py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200 text-lg font-medium flex items-center justify-center gap-2 mb-8"
+        >
+          Save Form
+        </button>
       </div>
     </div>
   );
