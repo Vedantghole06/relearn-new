@@ -33,12 +33,12 @@ export default function FormDataPage() {
 
   return (
     <div className="bg-gray-100 p-4 md:p-6 md:fixed md:inset-15 md:min-h-screen md:ml-[30vh] md:overflow-hidden">
-      <h1 className="text-2xl font-bold mb-4 text-center md:text-left">
+      <h1 className="text-2xl font-bold mb-4 md:ml-4 text-center md:text-left">
         Form Data
       </h1>
       <div className="flex flex-col md:flex-row gap-4">
         {/* Patient List */}
-        <div className="bg-white shadow-lg p-4 rounded-lg w-full md:w-1/4 md:h-[80vh] overflow-hidden">
+        <div className="bg-white shadow-lg p-4 md:ml-4 rounded-lg w-full md:w-1/4 md:h-[80vh] overflow-hidden">
           <h2 className="text-lg font-semibold mb-2 text-center md:text-left">
             Patient Data
           </h2>
@@ -53,9 +53,8 @@ export default function FormDataPage() {
             {filteredPatients.map((patient, index) => (
               <div
                 key={index}
-                className={`p-2 border-b cursor-pointer hover:bg-gray-200 ${
-                  selectedPatient === patient ? "bg-gray-300" : ""
-                }`}
+                className={`p-2 border-b cursor-pointer hover:bg-gray-200 ${selectedPatient === patient ? "bg-gray-300" : ""
+                  }`}
                 onClick={() => setSelectedPatient(patient)}
               >
                 {patient}
