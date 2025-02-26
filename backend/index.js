@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import userRoutes from './routes/user.routes.js';
+import formRoutes from './routes/form.routes.js';
 
 dotenv.config();
 
@@ -28,5 +29,6 @@ mongoose.connect(MONGODB_URI)
     });
 
 app.use('/api/users', userRoutes);
+app.use('/api/forms', formRoutes);
 
 app.listen(PORT, () => { console.log("Server is running on port", PORT); });

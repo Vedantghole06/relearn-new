@@ -1,34 +1,21 @@
-import { useState } from "react";
-
-const patients = [
-  "Manoj Thakur",
-  "Sunita Yadav",
-  "Rajesh Kulkarni",
-  "Meena Nair",
-  "Arun Kumar",
-  "Shweta Shah",
-  "Govind Iyer",
-  "Preeti Saxena",
-  "Nikhil Bansal",
-  "Komal Tiwari",
-  "Vijay Pawar",
-  "Rahul Sharma",
-  "Amit Desai",
-  "Suresh Patil",
-  "Pooja Verma",
-  "Neha Joshi",
-  "Ramesh Gupta",
-  "Anjali Mehta",
-  "Deepak Singh",
-  "Kiran Rao",
-];
+import { useState, useEffect } from "react";
+import { getForms } from "../api";
 
 export default function FormDataPage() {
   const [search, setSearch] = useState("");
-  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [selectedForm, setSelectedForm] = useState(null);
+  const [forms, setForms] = useState([]);
 
-  const filteredPatients = patients.filter((patient) =>
-    patient.toLowerCase().includes(search.toLowerCase())
+  useEffect(() => {
+    const fetchForms = async () => {
+      const data = await getForms();
+      setForms(data);
+    };
+    fetchForms();
+  }, []);
+
+  const filteredForms = forms.filter((form) =>
+    form.title.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -37,10 +24,10 @@ export default function FormDataPage() {
         Form Data
       </h1>
       <div className="flex flex-col md:flex-row gap-4">
-        {/* Patient List */}
+        {/* Form List */}
         <div className="bg-white shadow-lg p-4 md:ml-4 rounded-lg w-full md:w-1/4 md:h-[80vh] overflow-hidden">
           <h2 className="text-lg font-semibold mb-2 text-center md:text-left">
-            Patient Data
+            Forms
           </h2>
           <input
             type="text"
@@ -50,29 +37,51 @@ export default function FormDataPage() {
             onChange={(e) => setSearch(e.target.value)}
           />
           <div className="space-y-2 max-h-[200px] md:max-h-screen overflow-y-auto">
-            {filteredPatients.map((patient, index) => (
+            {filteredForms.map((form, index) => (
               <div
                 key={index}
-                className={`p-2 border-b cursor-pointer hover:bg-gray-200 ${selectedPatient === patient ? "bg-gray-300" : ""
-                  }`}
-                onClick={() => setSelectedPatient(patient)}
+                className={`p-2 border-b cursor-pointer hover:bg-gray-200 ${
+                  selectedForm === form ? "bg-gray-300" : ""
+                }`}
+                onClick={() => setSelectedForm(form)}
               >
-                {patient}
+                {form.title}
               </div>
             ))}
           </div>
         </div>
-        {/* Patient Details */}
+        {/* Form Details */}
         <div className="bg-white shadow-lg p-4 rounded-lg w-full min-h-[200px] md:flex-1">
-          {selectedPatient ? (
+          {selectedForm ? (
             <div>
-              <h2 className="text-lg font-semibold mb-2">Patient Details</h2>
-              <p className="text-gray-700">Name: {selectedPatient}</p>
-              <p className="text-gray-600">Additional details go here...</p>
+              <h2 className="text-lg font-semibold mb-2">Form Details</h2>
+              <p className="text-gray-700">Title: {selectedForm.title}</p>
+              <p className="text-gray-600">
+                Description: {selectedForm.description}
+              </p>
+              {selectedForm.sections.map((section, sectionIndex) => (
+                <div key={sectionIndex} className="mt-4">
+                  <h3 className="text-md font-semibold">{section.title}</h3>
+                  {section.questions.map((question, questionIndex) => (
+                    <div key={questionIndex} className="ml-4 mt-2">
+                      <p className="text-gray-700">{question.text}</p>
+                      {question.options.length > 0 && (
+                        <ul className="list-disc list-inside">
+                          {question.options.map((option, optionIndex) => (
+                            <li key={optionIndex} className="text-gray-600">
+                              {option}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))}
             </div>
           ) : (
             <p className="text-gray-500 text-center md:text-left">
-              Select a patient to view details
+              Select a form to view details
             </p>
           )}
         </div>
