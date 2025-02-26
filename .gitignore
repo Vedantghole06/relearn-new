@@ -1,2 +1,4 @@
 node_modules/
-g
+backend/node_modules/
+frontend/node_modules/
+admin-panel/node_modules/
