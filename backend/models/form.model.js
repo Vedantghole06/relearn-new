@@ -1,5 +1,28 @@
 import mongoose from 'mongoose';
 
+const responseSchema = new mongoose.Schema({
+    formLink: {
+        type: String,
+        required: true,
+    },
+    responses: [
+        {
+            questionId: {
+                type: mongoose.Schema.Types.ObjectId,
+                required: true,
+            },
+            questionText: {
+                type: String,
+                required: true,
+            },
+            answer: {
+                type: mongoose.Schema.Types.Mixed,
+                required: true,
+            },
+        },
+    ],
+}, { timestamps: true });
+
 const questionSchema = new mongoose.Schema({
     text: {
         type: String,
@@ -12,7 +35,7 @@ const questionSchema = new mongoose.Schema({
         enum: ['Short Answer', 'Long Answer', 'Multiple Choice', 'Checkbox', 'Decimal', 'Number', 'File'],
     },
     options: [{ type: String }],
-}, { _id: false });
+}, { _id: true });
 
 const sectionSchema = new mongoose.Schema({
     title: {
@@ -21,7 +44,7 @@ const sectionSchema = new mongoose.Schema({
         trim: true,
     },
     questions: [questionSchema]
-}, { _id: false });
+}, { _id: true });
 
 const formSchema = new mongoose.Schema({
     title: {
@@ -34,7 +57,13 @@ const formSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
-    sections: [sectionSchema]
+    sections: [sectionSchema],
+    link: {
+        type: String,
+        unique: true,
+        required: true,
+    }
 }, { timestamps: true });
 
-export default mongoose.model("Form", formSchema);
+export const Form = mongoose.model("Form", formSchema);
+export const FormResponse = mongoose.model("FormResponse", responseSchema);

@@ -1,70 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
-
-const usersData = [
-  {
-    name: "Vedant Ghole",
-    email: "vedantghole@gm.com",
-    specialization: "Gynaecologist",
-    country: "India",
-  },
-  {
-    name: "Tanushree Mendhe",
-    email: "tanushree@gm.com",
-    specialization: "Psychologist",
-    country: "India",
-  },
-  {
-    name: "Yogesh Mishra",
-    email: "yogesh@gmail.com",
-    specialization: "Neurologist",
-    country: "India",
-  },
-  {
-    name: "Dhanesh Mate",
-    email: "dm@gm.com",
-    specialization: "Gynaecologist",
-    country: "India",
-  },
-  {
-    name: "Shruti Kamble",
-    email: "tanu@gm.com",
-    specialization: "Psychologist",
-    country: "India",
-  },
-  {
-    name: "Divyanshu Mishra",
-    email: "md@gm.com",
-    specialization: "Neurologist",
-    country: "India",
-  },
-  {
-    name: "Crish Garvin",
-    email: "crish3@gm.com",
-    specialization: "Gynaecologist",
-    country: "India",
-  },
-  {
-    name: "Kartik Lakudkar",
-    email: "kar@gm.com",
-    specialization: "Psychologist",
-    country: "India",
-  },
-  {
-    name: "Mansi App",
-    email: "appbana@gm.com",
-    specialization: "Neurologist",
-    country: "India",
-  },
-];
+import { getAllUsers } from "../api";
 
 const UsersPage = () => {
   const [search, setSearch] = useState("");
-  const [users, setUsers] = useState(usersData);
+  const [users, setUsers] = useState([]);
 
-  const handleDelete = (email) => {
-    setUsers(users.filter((user) => user.email !== email));
-  };
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const data = await getAllUsers();
+      setUsers(data);
+    };
+    fetchUsers();
+  }, []);
+
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -84,32 +36,22 @@ const UsersPage = () => {
 
       {/* Users Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {users
-          .filter((user) =>
-            user.name.toLowerCase().includes(search.toLowerCase())
-          )
-          .map((user, index) => (
-            <div
-              key={index}
-              className="bg-white shadow-md p-6 rounded-lg relative"
-            >
-              <div className="text-gray-700">
-                <h2 className="font-semibold text-lg">{user.name}</h2>
-                <p className="text-sm text-gray-500">E-mail</p>
-                <p className="mb-2">{user.email}</p>
-                <p className="text-sm text-gray-500">Specialization</p>
-                <p className="mb-2">{user.specialization}</p>
-                <p className="text-sm text-gray-500">Country</p>
-                <p className="mb-4">{user.country}</p>
-              </div>
-              <button
-                onClick={() => handleDelete(user.email)}
-                className="absolute bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg"
-              >
-                Delete
-              </button>
+        {filteredUsers.map((user, index) => (
+          <div
+            key={index}
+            className="bg-white shadow-md p-6 rounded-lg relative"
+          >
+            <div className="text-gray-700">
+              <h2 className="font-semibold text-lg">{user.name}</h2>
+              <p className="text-sm text-gray-500">E-mail</p>
+              <p className="mb-2">{user.email}</p>
+              <p className="text-sm text-gray-500">Specialization</p>
+              <p className="mb-2">{user.sector}</p>
+              <p className="text-sm text-gray-500">Country</p>
+              <p className="mb-4">{user.country}</p>
             </div>
-          ))}
+          </div>
+        ))}
       </div>
 
       {/* Pagination Controls */}

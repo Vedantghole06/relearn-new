@@ -18,6 +18,11 @@ export default function FormDataPage() {
     form.title.toLowerCase().includes(search.toLowerCase())
   );
 
+  const handleCopyLink = (link) => {
+    navigator.clipboard.writeText(`${window.location.origin}/form/${link}`);
+    alert("Form link copied to clipboard!");
+  };
+
   return (
     <div className="bg-gray-100 p-4 md:p-6 md:fixed md:inset-15 md:min-h-screen md:ml-[30vh] md:overflow-hidden">
       <h1 className="text-2xl font-bold mb-4 md:ml-4 text-center md:text-left">
@@ -59,6 +64,18 @@ export default function FormDataPage() {
               <p className="text-gray-600">
                 Description: {selectedForm.description}
               </p>
+              <div className="flex items-center gap-2 mt-4">
+                <p className="text-gray-700">
+                  Link: {`${window.location.origin}/form/${selectedForm.link}`}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => handleCopyLink(selectedForm.link)}
+                  className="px-2 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+                >
+                  Copy Link
+                </button>
+              </div>
               {selectedForm.sections.map((section, sectionIndex) => (
                 <div key={sectionIndex} className="mt-4">
                   <h3 className="text-md font-semibold">{section.title}</h3>
