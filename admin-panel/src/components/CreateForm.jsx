@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Plus, X, ChevronDown } from "lucide-react";
-import { createForm } from "../api.js";
+import { createForm } from "../api";
 
 const CreateForm = () => {
   const [formTitle, setFormTitle] = useState("");
@@ -19,6 +19,7 @@ const CreateForm = () => {
       ],
     },
   ]);
+  const [formLink, setFormLink] = useState("");
 
   const addSection = () => {
     setSections([
@@ -222,7 +223,13 @@ const CreateForm = () => {
       })),
     };
     const response = await createForm(formData);
+    setFormLink(response.form.link);
     console.log(response);
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(`${window.location.origin}/form/${formLink}`);
+    alert("Form link copied to clipboard!");
   };
 
   return (
@@ -437,9 +444,31 @@ const CreateForm = () => {
             type="submit"
             className="w-full py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200 text-lg font-medium flex items-center justify-center gap-2 mb-8"
           >
-            Save Form
+            Submit
           </button>
         </form>
+        {formLink && (
+          <div className="mt-8 text-center">
+            <p className="text-lg text-gray-700 mb-4">
+              Form created successfully! Copy the link below to share:
+            </p>
+            <div className="flex justify-center items-center gap-2">
+              <input
+                type="text"
+                value={`${window.location.origin}/form/${formLink}`}
+                readOnly
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 w-full max-w-lg"
+              />
+              <button
+                type="button"
+                onClick={handleCopyLink}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+              >
+                Copy Link
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
