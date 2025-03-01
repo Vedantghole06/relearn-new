@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:5001/api', // Update this URL if your backend is hosted elsewhere
+    baseURL: 'https://relearn-new-backend.vercel.app/api', // Update this URL if your backend is hosted elsewhere
     headers: {
         'Content-Type': 'application/json',
     },

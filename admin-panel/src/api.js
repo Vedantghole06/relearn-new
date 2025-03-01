@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5001/api/forms';
+const API_URL = 'https://relearn-new-backend.vercel.app/api/forms';
 
 export const createForm = async (formData) => {
     const response = await fetch(`${API_URL}/create`, {
