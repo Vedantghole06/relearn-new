@@ -11,7 +11,7 @@ const app = express();
 
 // Use CORS middleware
 app.use(cors({
-    origin: ['http://localhost:5173', 'http://localhost:5174'], // Allow both origins
+    origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'], // Allow both origins
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // Allow cookies to be sent with requests
 }));
@@ -23,7 +23,7 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 mongoose.connect(MONGODB_URI)
     .then(() => { console.log("Connected to database"); })
-    .catch((err) => { 
+    .catch((err) => {
         console.error("Error connecting to database:", err);
         process.exit(1);
     });
