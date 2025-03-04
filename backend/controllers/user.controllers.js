@@ -39,6 +39,105 @@ export const signup = async (req, res) => {
     }
 };
 
+// Login Controller
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '3h' });
+
+    res.json({ token });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// Logout Controller
+export const logout = async (req, res) => {
+  res.json({ message: 'User logged out successfully' });
+};
+
+// Get User Profile
+export const getUserProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.userId).select('-password');
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching user profile', error: error.message });
+    }
+};
+
+// Get One User by ID
+export const getOneUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id).select('-password');
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching user', error: error.message });
+    }
+};
+
+// Delete User Profile
+export const deleteProfile = async (req, res) => {
+    try {
+        const user = await User.findByIdAndDelete(req.userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json({ message: 'User deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting user profile', error: error.message });
+    }
+};
+
+// Delete User by ID
+export const deleteUserById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const user = await User.findByIdAndDelete(id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json({ message: 'User deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting user', error: error.message });
+    }
+};
+
+// Update User Profile
+export const updateProfile = async (req, res) => {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(req.userId, req.body, { new: true }).select('-password');
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json({ message: 'User profile updated successfully', updatedUser });
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating user profile', error: error.message });
+    }
+};
+
 // Get All Users
 export const getAllUsers = async (req, res) => {
     try {

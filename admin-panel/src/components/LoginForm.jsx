@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import axiosInstance from "../axiosinstance.js";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -17,29 +16,25 @@ const LoginForm = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await axiosInstance.post("/front/login", formData);
-      console.log(response.data);
-      // Store the token in local storage
-      localStorage.setItem("token", response.data.token);
-      // Navigate to the Home page
-      navigate("/home");
-    } catch (error) {
-      console.error("Error logging in:", error.response.data);
-      // Handle error (e.g., display error message)
+    const hardcodedEmail = "admin@example.com";
+    const hardcodedPassword = "password123";
+
+    if (
+      formData.email === hardcodedEmail &&
+      formData.password === hardcodedPassword
+    ) {
+      localStorage.setItem("token", "authenticated");
+      localStorage.setItem("tokenTime", new Date().toISOString());
+      navigate("/admin-panel");
+    } else {
+      alert("Invalid email or password");
     }
   };
 
   return (
-    <div
-      className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center"
-      style={{
-        backgroundImage:
-          "url(https://kf.kobotoolbox.org/static/compiled/signup_photo.jpg)",
-      }}
-    >
+    <div className="flex flex-col items-center justify-center min-h-screen bg-black">
       <div className="bg-gray-800 opacity-85 p-8 rounded-lg shadow-lg w-full max-w-sm">
         <div className="text-center mb-6">
           <img src={null} alt="Relearn Logo" className="h-10 mx-auto" />
@@ -74,27 +69,6 @@ const LoginForm = () => {
             Login
           </button>
         </form>
-        <div className="mt-4 flex justify-around text-center text-white">
-          <Link to="/" className="text-blue-400">
-            {" "}
-            Create an account
-          </Link>
-          <Link href="#" className="text-blue-400">
-            {" "}
-            Forgot password?
-          </Link>
-        </div>
-        <hr className="border-white mt-2" />
-        <div className="mt-4 text-center text-white space-x-2">
-          <Link to="/terms" className="text-blue-400">
-            {" "}
-            Terms of Service
-          </Link>
-          <Link to="/privacy" className="text-blue-400">
-            {" "}
-            Privacy Policy
-          </Link>
-        </div>
       </div>
     </div>
   );

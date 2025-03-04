@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import userRoutes from './routes/user.routes.js';
 import formRoutes from './routes/form.routes.js';
+import frontRoutes from './routes/front.routes.js'; // Import front routes
 
 dotenv.config();
 
@@ -30,5 +31,6 @@ mongoose.connect(MONGODB_URI)
 
 app.use('/api/users', userRoutes);
 app.use('/api/forms', formRoutes);
+app.use('/api/front', frontRoutes); // Add front routes
 
 app.listen(PORT, () => { console.log("Server is running on port", PORT); });

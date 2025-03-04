@@ -1,14 +1,14 @@
 import express from 'express';
-import { signup, login, getOneUser, deleteProfile, updateProfile, getAllUsers } from '../controllers/user.controllers.js';
-import { protect } from '../middlewares/user.middlewares.js';
+import { signup, login, getAllUsers, deleteUserById, deleteProfile,logout, updateProfile } from '../controllers/user.controllers.js';
+import authMiddleware from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
 router.post('/signup', signup);
 router.post('/login', login);
-router.get('/', getAllUsers); // Updated route
-router.get('/:id', getOneUser);
-router.delete('/delete', protect, deleteProfile);
-router.put('/update', protect, updateProfile);
-
-export default router;
+router.get('/',  getAllUsers); // Protected route
+router.delete('/:id', deleteUserById); // Protected route
+router.delete('/delete', deleteProfile);
+router.put('/update', authMiddleware, updateProfile);
+router.post('/logout', logout); // Add logout route
+export default router;                                                                    

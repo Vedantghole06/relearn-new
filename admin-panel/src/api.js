@@ -11,6 +11,7 @@ export const createForm = async (formData) => {
     return response.json();
 };
 
+
 export const getForms = async () => {
     const response = await fetch(`${API_URL}/all`);
     return response.json();
@@ -33,7 +34,27 @@ export const submitFormResponse = async (responseData) => {
     return response.json();
 };
 export const getAllUsers = async () => {
-    const response = await fetch(`${API_URL}/users`);
+    const response = await fetch(`http://localhost:5001/api/users`);
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return response.json();
+};
+
+export const deleteUserById = async (id) => {
+    const response = await fetch(`http://localhost:5001/api/users/${id}`, {
+        method: 'DELETE',
+    });
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return response.json();
+};
+
+export const logout = async () => {
+    const response = await fetch(`http://localhost:5001/api/users/logout`, {
+        method: 'POST',
+    });
     if (!response.ok) {
         throw new Error('Network response was not ok');
     }

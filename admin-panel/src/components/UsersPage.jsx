@@ -1,17 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { Search, ChevronLeft, ChevronRight } from "lucide-react";
-import { getAllUsers } from "../api";
+import { Search } from "lucide-react";
+import { getAllUsers, deleteUserById, logout } from "../api";
+import { useNavigate } from "react-router-dom";
 
 const UsersPage = () => {
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchUsers = async () => {
+  const fetchUsers = async () => {
+    try {
       const data = await getAllUsers();
       setUsers(data);
-    };
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteUserById(id);
+      fetchUsers(); // Refresh the user list after deletion
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+
+
+  useEffect(() => {
     fetchUsers();
+    const interval = setInterval(fetchUsers, 5000); // Poll every 5 seconds
+    return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
 
   const filteredUsers = users.filter((user) =>
@@ -49,20 +68,15 @@ const UsersPage = () => {
               <p className="mb-2">{user.sector}</p>
               <p className="text-sm text-gray-500">Country</p>
               <p className="mb-4">{user.country}</p>
+              <button
+                onClick={() => handleDelete(user._id)}
+                className="absolute bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg"
+              >
+                Delete
+              </button>
             </div>
           </div>
         ))}
-      </div>
-
-      {/* Pagination Controls */}
-      <div className="flex justify-center items-center mt-6 gap-2">
-        <button className="p-2 border rounded-lg text-gray-500 hover:bg-gray-200">
-          <ChevronLeft size={20} />
-        </button>
-        <span>Page 1 of 10</span>
-        <button className="p-2 border rounded-lg text-gray-500 hover:bg-gray-200">
-          <ChevronRight size={20} />
-        </button>
       </div>
     </div>
   );
