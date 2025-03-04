@@ -41,6 +41,7 @@ export const signup = async (req, res) => {
 
 // Login Controller
 export const login = async (req, res) => {
+<<<<<<< HEAD
   try {
     const { email, password } = req.body;
 
@@ -65,6 +66,31 @@ export const login = async (req, res) => {
 // Logout Controller
 export const logout = async (req, res) => {
   res.json({ message: 'User logged out successfully' });
+=======
+    try {
+        const { username, password } = req.body;
+
+        // Find user by email
+        const user = await User.findOne({ username }).select('+password');
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid email or password' });
+        }
+
+        // Compare passwords
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Invalid email or password' });
+        }
+
+        // Generate JWT token
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        res.json({ message: 'Login successful', token });
+
+    } catch (error) {
+        res.status(500).json({ message: 'Error logging in', error: error.message });
+    }
+>>>>>>> 059e7abf1a7c531942699d712dd817ee4f2e6276
 };
 
 // Get User Profile
@@ -109,6 +135,7 @@ export const deleteProfile = async (req, res) => {
     }
 };
 
+<<<<<<< HEAD
 // Delete User by ID
 export const deleteUserById = async (req, res) => {
     try {
@@ -124,6 +151,8 @@ export const deleteUserById = async (req, res) => {
     }
 };
 
+=======
+>>>>>>> 059e7abf1a7c531942699d712dd817ee4f2e6276
 // Update User Profile
 export const updateProfile = async (req, res) => {
     try {
